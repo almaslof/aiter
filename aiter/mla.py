@@ -140,23 +140,15 @@ def mla_decode_fwd(
 
     if nhead == 16 and max_seqlen_q == 1:
         # special case for 16 heads and max_seqlen_q == 1
-        logits = torch.empty(
-            (total_s, num_kv_splits, nhead, v_head_dim),
-            dtype=dtypes.fp32,
-            device=device,
-        )
+        logits = torch.empty((total_s, num_kv_splits, nhead, v_head_dim), dtype=dtypes.fp32, device=device,)
     elif nhead in [16, 128]:
-        logits = (
-            o.view((total_s, num_kv_splits, nhead, v_head_dim))
-            if num_kv_splits == 1
-            else torch.empty(
-                (total_s, num_kv_splits, nhead, v_head_dim),
-                dtype=dtypes.fp32,
-                device=device,
-            )
-        )
+        if num_kv_splits == 1:
+            logits = o.view((total_s, num_kv_splits, nhead, v_head_dim))
+        else:
+            logits = torch.empty((total_s, num_kv_splits, nhead, v_head_dim), dtype=dtypes.fp32, device=device,)
     else:
-        assert False, f"{nhead=} not supported"
+        logits = torch.empty((total_s, num_kv_splits, nhead, v_head_dim), dtype=dtypes.fp32, device=device)
+        # assert False, f"{nhead=} not supported"
 
     attn_lse = torch.empty(
         (total_s, num_kv_splits, nhead, 1), dtype=dtypes.fp32, device=device

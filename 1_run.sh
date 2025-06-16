@@ -12,4 +12,4 @@ docker run -it --rm \
         -v $(pwd):/aiter \
         --shm-size 256G \
         --name dev-aiter \
-        dev-aiter /bin/bash
+        mydev-aiter /bin/bash
