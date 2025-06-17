@@ -137,7 +137,7 @@ def mla_decode_fwd(
     num_kv_splits, mgc = get_meta_param(
         num_kv_splits, bs, total_kv, nhead, max_seqlen_q
     )
-
+    # sglang passes o as empty https://github.com/sgl-project/sglang/blob/b1286a116aa2a58ad94c94989386ee36a6f5614f/python/sglang/srt/layers/attention/triton_backend.py#L696
     if nhead == 16 and max_seqlen_q == 1:
         # special case for 16 heads and max_seqlen_q == 1
         logits = torch.empty((total_s, num_kv_splits, nhead, v_head_dim), dtype=dtypes.fp32, device=device,)
@@ -147,8 +147,8 @@ def mla_decode_fwd(
         else:
             logits = torch.empty((total_s, num_kv_splits, nhead, v_head_dim), dtype=dtypes.fp32, device=device,)
     else:
-        logits = torch.empty((total_s, num_kv_splits, nhead, v_head_dim), dtype=dtypes.fp32, device=device)
-        # assert False, f"{nhead=} not supported"
+        #logits = torch.empty((total_s, num_kv_splits, nhead, v_head_dim), dtype=dtypes.fp32, device=device)
+        assert False, f"{nhead=} not supported"
 
     attn_lse = torch.empty(
         (total_s, num_kv_splits, nhead, 1), dtype=dtypes.fp32, device=device
