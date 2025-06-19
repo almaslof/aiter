@@ -125,7 +125,7 @@ def mla_decode_fwd(
     num_kv_splits=None,  # for experts only!!!
 ):
     import logging
-    logging.basicConfig(filename='/sgl-workspace/mla_decode_fwd.log', 
+    logging.basicConfig(filename='/sgl-workspace/aiter_mla_decode_fwd.log', 
                         level=logging.DEBUG,
                         format='%(asctime)s - %(levelname)s - %(message)s')
     logging.debug("MLA Decode Forward Parameters:")
