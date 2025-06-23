@@ -125,10 +125,9 @@ def mla_decode_fwd(
     num_kv_splits=None,  # for experts only!!!
 ):
     import logging
-    logging.basicConfig(filename='/sgl-workspace/aiter_mla_decode_fwd.log', 
+    logging.basicConfig(filename='/sgl-workspace/mla_decode_fwd_from_aiter.log', 
                         level=logging.DEBUG,
                         format='%(asctime)s - %(levelname)s - %(message)s')
-    logging.debug("MLA Decode Forward Parameters:")
 
     device = q.device
     assert logit_cap <= 0, f"{logit_cap=} is not support yet"
@@ -144,6 +143,7 @@ def mla_decode_fwd(
         num_kv_splits, bs, total_kv, nhead, max_seqlen_q
     )
 
+    logging.debug("MLA Decode Forward Parameters:")
     logging.debug(f"nhead={nhead} max_seqlen_q={max_seqlen_q}")
 
     # sglang passes o as empty https://github.com/sgl-project/sglang/blob/b1286a116aa2a58ad94c94989386ee36a6f5614f/python/sglang/srt/layers/attention/triton_backend.py#L696
