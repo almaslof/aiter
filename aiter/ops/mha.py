@@ -2874,9 +2874,17 @@ def mha_batch_prefill_func(
     v_descale=None,
     kv_block_descale=None,  # [num_block, num_kv_head, 2] per-page K/V descales
     sink_ptr=None,
+    custom_mask=None,  # Optional bool mask for speculative decoding (flattened per-seq)
+    mask_indptr=None,  # Optional (batch_size + 1,) cumulative mask lengths
 ):
     if softmax_scale is None:
         softmax_scale = q.shape[-1] ** (-0.5)
+    if custom_mask is not None or mask_indptr is not None:
+        raise NotImplementedError(
+            "custom_mask and mask_indptr for tree-based speculative decoding are not "
+            "yet supported by the CK mha_batch_prefill kernel. Use causal=True for "
+            "greedy (topk=1) speculative decoding."
+        )
     if sink_ptr is not None:
         assert sink_ptr.device == q.device, "sink_ptr must be on the same device as q"
         assert sink_ptr.shape[0] == q.size(1), "sink_ptr has incorrect shape"
